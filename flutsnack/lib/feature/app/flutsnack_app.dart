@@ -1,3 +1,4 @@
+import 'package:flutsnack/feature/dashboard/dashboard.dart';
 import 'package:flutsnack/feature/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,53 +35,62 @@ class _FlutsnackAppScreenState extends State<FlutsnackAppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentPageIndex,
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        destinations: [
-          NavigationDestination(
-              selectedIcon: SvgPicture.asset(
-                "icons/dashboard_filled.svg",
+    return PopScope(
+      canPop: currentPageIndex == 0,
+      onPopInvoked: (_) {
+        setState(() {
+          currentPageIndex = 0;
+        });
+      },
+      child: Scaffold(
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: currentPageIndex,
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          destinations: [
+            NavigationDestination(
+                selectedIcon: SvgPicture.asset(
+                  "assets/icons/dashboard_filled.svg",
+                    colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
+                ),
+                icon: SvgPicture.asset(
+                    "assets/icons/dashboard_outlined.svg",
+                    colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
+                ),
+                label: "Dashboard"
+            ),
+            NavigationDestination(
+                selectedIcon: SvgPicture.asset(
+                    "assets/icons/search_normal_filled.svg",
                   colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
-              ),
-              icon: SvgPicture.asset(
-                  "icons/dashboard_outlined.svg",
+                ),
+                icon: SvgPicture.asset(
+                    "assets/icons/search_normal_outlined.svg",
                   colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
-              ),
-              label: "Dashboard"
-          ),
-          NavigationDestination(
-              selectedIcon: SvgPicture.asset(
-                  "icons/search_normal_filled.svg",
-                colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
-              ),
-              icon: SvgPicture.asset(
-                  "icons/search_normal_outlined.svg",
-                colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
-              ),
-              label: "Search"
-          ),
-          NavigationDestination(
-              selectedIcon: SvgPicture.asset(
-                  "icons/setting_filled.svg",
-                colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
-              ),
-              icon: SvgPicture.asset(
-                  "icons/setting_outlined.svg",
-                colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
-              ),
-              label: "Setting"
-          )
-        ],
+                ),
+                label: "Search"
+            ),
+            NavigationDestination(
+                selectedIcon: SvgPicture.asset(
+                    "assets/icons/setting_filled.svg",
+                  colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
+                ),
+                icon: SvgPicture.asset(
+                    "assets/icons/setting_outlined.svg",
+                  colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
+                ),
+                label: "Setting"
+            )
+          ],
+        ),
+        body: [
+          const Dashboard(),
+          const Search()
+        ][currentPageIndex],
       ),
-      body: [
-        const Search()
-      ][0],
     );
   }
 }

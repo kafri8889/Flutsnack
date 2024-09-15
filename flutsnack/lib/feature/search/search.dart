@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../model/snack_category.dart';
+import '../../theme.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -26,132 +27,149 @@ class _SearchState extends State<Search> {
       });
     });
 
-    return SizedBox(
-      width: double.infinity,
-      child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SearchAnchor(
-                    isFullScreen: true,
-                    searchController: controller,
-                    builder: (BuildContext context, SearchController controller) {
-                      return SearchBar(
-                        controller: controller,
-                        hintText: "Search Flutsnack",
-                        elevation: WidgetStateProperty.all(0),
-                        leading: SvgPicture.asset(
-                            "icons/search_normal_outlined.svg",
-                            colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
-                        ),
-                        padding: const WidgetStatePropertyAll(
-                            EdgeInsets.symmetric(horizontal: 16)
-                        ),
-                        onTap: () {
-                          controller.openView();
-                        },
-                        onChanged: (String query) {
-                          controller.openView();
-                        },
-                      );
-                    },
-                    suggestionsBuilder: (BuildContext context, SearchController controller) {
-                      return List.generate(searchResult.length, (int index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: double.infinity,
+        child: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SearchAnchor(
+                      isFullScreen: true,
+                      searchController: controller,
+                      builder: (BuildContext context, SearchController controller) {
+                        return SearchBar(
+                          controller: controller,
+                          hintText: "Search Flutsnack",
+                          elevation: WidgetStateProperty.all(0),
+                          leading: SvgPicture.asset(
+                              "assets/icons/search_normal_outlined.svg",
+                              colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)
                           ),
-                          padding: const EdgeInsets.only(left: 8),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
-                            borderRadius: const BorderRadius.all(Radius.circular(8))
+                          padding: const WidgetStatePropertyAll(
+                              EdgeInsets.symmetric(horizontal: 16)
                           ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: Text(searchResult[index].name)
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  height: 72,
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(100),
-                                          bottomLeft: Radius.circular(100)
-                                      )
-                                  ),
-                                  child: Image.asset(
-                                    searchResult[index].imagePath,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              )
-                            ],
-                          ),
+                          onTap: () {
+                            controller.openView();
+                          },
+                          onChanged: (String query) {
+                            controller.openView();
+                          },
                         );
-                      });
-                    }
+                      },
+                      suggestionsBuilder: (BuildContext context, SearchController controller) {
+                        return List.generate(searchResult.length, (int index) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8
+                            ),
+                            padding: const EdgeInsets.only(left: 8),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(Radius.circular(8)),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Theme.of(context).colorScheme.primaryFixed,
+                                  Theme.of(context).colorScheme.tertiaryFixedDim,
+                                  Theme.of(context).colorScheme.secondaryFixedDim,
+                                ]
+                              )
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    searchResult[index].name,
+                                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                        color: Colors.black87
+                                    )
+                                  )
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 72,
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(100),
+                                            bottomLeft: Radius.circular(100)
+                                        )
+                                    ),
+                                    child: Image.asset(
+                                      searchResult[index].imagePath,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                      }
+                  ),
                 ),
-              ),
-              const Divider(height: 1, thickness: 1),
-              LayoutBuilder(
-                builder: (context, constraint) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        Text(
-                          "Categories",
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold
+                const Divider(height: 1, thickness: 1),
+                LayoutBuilder(
+                  builder: (context, constraint) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          Text(
+                            "Categories",
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
-                        ),
-                        GridView.count(
-                          shrinkWrap: true,
-                          crossAxisCount: constraint.maxWidth < 700 ? 2 : 4,
-                          childAspectRatio: 2/1,
-                          children: _generateSnackCategoryItem(
-                            snacks: LocalFlutsnackDataProvider.categories,
-                            gradientColors: [
-                              Theme.of(context).colorScheme.primaryContainer,
-                              Theme.of(context).colorScheme.surfaceContainer,
-                            ]
+                          GridView.count(
+                            shrinkWrap: true,
+                            crossAxisCount: constraint.maxWidth < 700 ? 2 : 4,
+                            childAspectRatio: 2/1,
+                            children: _generateSnackCategoryItem(
+                              snacks: LocalFlutsnackDataProvider.categories,
+                              gradientColors: [
+                                MaterialTheme.darkScheme().tertiaryFixed,
+                                MaterialTheme.darkScheme().onSurface,
+                                MaterialTheme.darkScheme().primary,
+                                MaterialTheme.darkScheme().onTertiaryContainer,
+                              ]
+                            ),
                           ),
-                        ),
-                        Text(
-                          "Lifestyles",
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold
+                          Text(
+                            "Lifestyles",
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
-                        ),
-                        GridView.count(
-                          shrinkWrap: true,
-                          crossAxisCount: constraint.maxWidth < 700 ? 2 : 4,
-                          childAspectRatio: 2/1,
-                          children: _generateSnackCategoryItem(
-                            snacks: LocalFlutsnackDataProvider.lifestyles,
-                            gradientColors: [
-                              Theme.of(context).colorScheme.secondaryContainer,
-                              Theme.of(context).colorScheme.tertiaryContainer,
-                            ]
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-              )
-            ],
-          )
+                          GridView.count(
+                            shrinkWrap: true,
+                            crossAxisCount: constraint.maxWidth < 700 ? 2 : 4,
+                            childAspectRatio: 2/1,
+                            children: _generateSnackCategoryItem(
+                              snacks: LocalFlutsnackDataProvider.lifestyles,
+                              gradientColors: [
+                                MaterialTheme.lightScheme().primaryContainer,
+                                MaterialTheme.lightScheme().surfaceDim,
+                                MaterialTheme.lightScheme().tertiaryFixedDim,
+                                MaterialTheme.lightScheme().secondaryContainer,
+                              ]
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                )
+              ],
+            )
+        ),
       ),
     );
   }
@@ -172,7 +190,12 @@ class _SearchState extends State<Search> {
         child: Row(
           children: [
             Expanded(
-                child: Text(snack.name)
+                child: Text(
+                  snack.name,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Colors.black87
+                  ),
+                )
             ),
             Expanded(
               child: FractionalTranslation(
@@ -186,7 +209,7 @@ class _SearchState extends State<Search> {
                     )
                   ),
                   child: Image.asset(
-                      snack.imagePath,
+                    snack.imagePath,
                     height: double.infinity,
                     fit: BoxFit.cover,
                   ),
